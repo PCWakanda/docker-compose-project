@@ -3,7 +3,7 @@ version: '3.8'
 services:
   eureka-server:
     build:
-      context: /Users/jose/Documents/GitHub/server  # Ruta completa al proyecto eureka-server
+      context: C:\Users\sgghu\Desktop\Universidad\server # Ruta completa al proyecto eureka-server
       dockerfile: Dockerfile  # El Dockerfile está en el directorio de eureka-server
     ports:
       - "8761:8761"
@@ -17,9 +17,18 @@ services:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=password
 
+  rabbitmq2:
+    image: rabbitmq:3-management
+    ports:
+      - "5673:5672"   # Puerto para microservicio2
+      - "15673:15672" # Puerto para la interfaz web
+    environment:
+      - RABBITMQ_DEFAULT_USER=user2
+      - RABBITMQ_DEFAULT_PASS=password2
+
   microservicio1:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio1 # Ruta completa al proyecto microservicio1
+      context: C:\Users\sgghu\Desktop\Universidad\Microservicio1 # Ruta completa al proyecto microservicio1
       dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio1
     ports:
       - "8080:8080"
@@ -35,11 +44,16 @@ services:
 
   microservicio2:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio2 # Ruta completa al proyecto microservicio2
+      context: C:\Users\sgghu\Desktop\Universidad\Microservicio2 # Ruta completa al proyecto microservicio2
       dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio2
     ports:
       - "8081:8081"
     environment:
       - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5673
+      - SPRING_RABBITMQ_USERNAME=user2
+      - SPRING_RABBITMQ_PASSWORD=password2
     depends_on:
       - eureka-server
+      - rabbitmq2
