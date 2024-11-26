@@ -3,7 +3,7 @@ version: '3.8'
 services:
   eureka-server:
     build:
-      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\server  # Ruta completa al proyecto eureka-server
+      context: /Users/jose/Documents/GitHub/server  # Ruta completa al proyecto eureka-server
       dockerfile: Dockerfile  # El Dockerfile está en el directorio de eureka-server
     ports:
       - "8761:8761"
@@ -19,7 +19,7 @@ services:
 
   microservicio1:
     build:
-      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio1 # Ruta completa al proyecto microservicio1
+      context: /Users/jose/Documents/GitHub/Microservicio1 # Ruta completa al proyecto microservicio1
       dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio1
     ports:
       - "8080:8080"
@@ -35,7 +35,7 @@ services:
 
   microservicio2:
     build:
-      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio2 # Ruta completa al proyecto microservicio2
+      context: /Users/jose/Documents/GitHub/Microservicio2 # Ruta completa al proyecto microservicio2
       dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio2
     ports:
       - "8081:8081"
