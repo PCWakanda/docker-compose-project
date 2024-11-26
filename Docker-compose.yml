@@ -18,3 +18,15 @@ services:
       - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
     depends_on:
       - eureka-server
+
+  microservicio2:
+    build:
+      context: /Users/jose/Documents/GitHub/Microservicio2  # Ruta completa al proyecto microservicio2
+      dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio2
+    ports:
+      - "8081:8081"
+    environment:
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+
