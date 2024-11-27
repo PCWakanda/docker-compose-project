@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'microservicio1'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['microservicio1:8080']
+
+  - job_name: 'microservicio2'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['microservicio2:8081']

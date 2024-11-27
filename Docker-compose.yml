@@ -33,6 +33,9 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: user
       SPRING_RABBITMQ_PASSWORD: password
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
     depends_on:
       - eureka-server
       - rabbitmq
@@ -47,8 +50,20 @@ services:
       - "8081:8081"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
     depends_on:
       - eureka-server
+    networks:
+      - eureka-network
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - eureka-network
 
