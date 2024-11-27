@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   eureka-server:
     build:
-      context: /Users/jose/Documents/GitHub/server  # Ruta completa al proyecto eureka-server
-      dockerfile: Dockerfile  # El Dockerfile está en el directorio de eureka-server
+      context: /Users/jose/Documents/GitHub/server
+      dockerfile: Dockerfile
     ports:
       - "8761:8761"
     networks:
@@ -24,17 +22,22 @@ services:
   mysql:
     image: mysql:8.0
     ports:
-      - "3311:3306"
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: P4ssword!
       MYSQL_DATABASE: my-app
     networks:
       - eureka-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   microservicio1:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio1  # Ruta completa al proyecto microservicio1
-      dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio1
+      context: /Users/jose/Documents/GitHub/Microservicio1
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -50,16 +53,19 @@ services:
       MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
     depends_on:
-      - eureka-server
-      - rabbitmq
-      - mysql
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - eureka-network
 
   microservicio2:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio2  # Ruta completa al proyecto microservicio2
-      dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio2
+      context: /Users/jose/Documents/GitHub/Microservicio2
+      dockerfile: Dockerfile
     ports:
       - "8081:8081"
     environment:
@@ -68,7 +74,8 @@ services:
       MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_started
     networks:
       - eureka-network
 
