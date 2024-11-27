@@ -21,6 +21,16 @@ services:
     networks:
       - eureka-network
 
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3311:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: P4ssword!
+      MYSQL_DATABASE: my-app
+    networks:
+      - eureka-network
+
   microservicio1:
     build:
       context: /Users/jose/Documents/GitHub/Microservicio1  # Ruta completa al proyecto microservicio1
@@ -33,12 +43,16 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: user
       SPRING_RABBITMQ_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/my-app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: P4ssword!
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
       MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
     depends_on:
       - eureka-server
       - rabbitmq
+      - mysql
     networks:
       - eureka-network
 
