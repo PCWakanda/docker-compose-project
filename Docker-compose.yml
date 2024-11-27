@@ -88,6 +88,13 @@ services:
     networks:
       - eureka-network
 
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - eureka-network
+
 networks:
   eureka-network:
     driver: bridge
