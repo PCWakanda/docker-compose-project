@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   eureka-server:
     build:
@@ -23,6 +25,21 @@ services:
     image: mysql:8.0
     ports:
       - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: P4ssword!
+      MYSQL_DATABASE: my-app
+    networks:
+      - eureka-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql2:
+    image: mysql:8.0
+    ports:
+      - "3312:3306"
     environment:
       MYSQL_ROOT_PASSWORD: P4ssword!
       MYSQL_DATABASE: my-app
@@ -73,9 +90,14 @@ services:
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
       MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql2:3306/my-app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: P4ssword!
     depends_on:
       eureka-server:
         condition: service_started
+      mysql2:
+        condition: service_healthy
     networks:
       - eureka-network
 
