@@ -107,7 +107,7 @@ services:
       - "8083:8083"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql4:3313/my-app
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql4:3306/my-app
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: P4ssword!
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
@@ -132,6 +132,43 @@ services:
       - eureka-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  microservicio6:
+    build:
+      context: /Users/jose/Documents/GitHub/Microservicio6
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql4:3306/my-app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: P4ssword!
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
+    depends_on:
+      eureka-server:
+        condition: service_started
+      mysql6:
+        condition: service_healthy
+    networks:
+      - eureka-network
+
+  mysql6:
+    image: mysql:8.0
+    ports:
+      - "3316:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: P4ssword!
+      MYSQL_DATABASE: my-app
+    networks:
+      - eureka-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
       retries: 5
