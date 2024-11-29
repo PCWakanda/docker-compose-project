@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   eureka-server:
     build:
-      context: /Users/jose/Documents/GitHub/server  # Ruta completa al proyecto eureka-server
-      dockerfile: Dockerfile  # El Dockerfile está en el directorio de eureka-server
+      context: /Users/jose/Documents/GitHub/server
+      dockerfile: Dockerfile
     ports:
       - "8761:8761"
     networks:
@@ -21,10 +19,40 @@ services:
     networks:
       - eureka-network
 
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: P4ssword!
+      MYSQL_DATABASE: my-app
+    networks:
+      - eureka-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql2:
+    image: mysql:8.0
+    ports:
+      - "3312:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: P4ssword!
+      MYSQL_DATABASE: my-app
+    networks:
+      - eureka-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   microservicio1:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio1  # Ruta completa al proyecto microservicio1
-      dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio1
+      context: /Users/jose/Documents/GitHub/Microservicio1
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -33,22 +61,94 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: user
       SPRING_RABBITMQ_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/my-app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: P4ssword!
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
     depends_on:
-      - eureka-server
-      - rabbitmq
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - eureka-network
 
   microservicio2:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio2  # Ruta completa al proyecto microservicio2
-      dockerfile: Dockerfile  # El Dockerfile está en el directorio de microservicio2
+      context: /Users/jose/Documents/GitHub/Microservicio2
+      dockerfile: Dockerfile
     ports:
       - "8081:8081"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql2:3306/my-app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: P4ssword!
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_started
+      mysql2:
+        condition: service_healthy
+    networks:
+      - eureka-network
+
+  microservicio4:
+    build:
+      context: /Users/jose/Documents/GitHub/Microservicio4
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql4:3313/my-app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: P4ssword!
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
+    depends_on:
+      eureka-server:
+        condition: service_started
+      mysql4:
+        condition: service_healthy
+    networks:
+      - eureka-network
+
+  mysql4:
+    image: mysql:8.0
+    ports:
+      - "3313:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: P4ssword!
+      MYSQL_DATABASE: my-app
+    networks:
+      - eureka-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - eureka-network
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
     networks:
       - eureka-network
 
