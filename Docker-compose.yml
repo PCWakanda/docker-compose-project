@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   eureka-server:
     build:
-      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\server
+      context: /Users/jose/Documents/GitHub/server
       dockerfile: Dockerfile
     ports:
       - "8761:8761"
@@ -53,7 +51,7 @@ services:
 
   microservicio1:
     build:
-      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio1
+      context: /Users/jose/Documents/GitHub/Microservicio1
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -81,7 +79,7 @@ services:
 
   microservicio2:
     build:
-      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio2
+      context: /Users/jose/Documents/GitHub/Microservicio2
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
@@ -103,7 +101,7 @@ services:
 
   microservicio4:
     build:
-      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio4
+      context: /Users/jose/Documents/GitHub/Microservicio4
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
