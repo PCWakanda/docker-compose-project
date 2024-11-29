@@ -1,7 +1,7 @@
 services:
   eureka-server:
     build:
-      context: /Users/jose/Documents/GitHub/server
+      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\server
       dockerfile: Dockerfile
     ports:
       - "8761:8761"
@@ -51,7 +51,7 @@ services:
 
   microservicio1:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio1
+      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio1
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -79,7 +79,7 @@ services:
 
   microservicio2:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio2
+      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio2
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
@@ -101,13 +101,13 @@ services:
 
   microservicio4:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio4
+      context: C:\Users\nsfgo\OneDrive\Documentos\GitHub\Microservicio4
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql4:3313/my-app
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql4:3314/my-app
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: P4ssword!
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
@@ -124,7 +124,7 @@ services:
   mysql4:
     image: mysql:8.0
     ports:
-      - "3313:3306"
+      - "3314:3306"
     environment:
       MYSQL_ROOT_PASSWORD: P4ssword!
       MYSQL_DATABASE: my-app
