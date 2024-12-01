@@ -32,7 +32,7 @@ public class FabricaController {
     @PostMapping("/encender") // Nuevo método
     public String encender() throws IOException, InterruptedException {
         String buildResult = executeCommand("docker-compose build");
-        String upResult = executeCommand("docker-compose up -d eureka-server rabbitmq mysql mysql2 mysql3 mysql4 mysql5 mysql6 prometheus grafana");
+        String upResult = executeCommand("docker-compose up -d eureka-server rabbitmq mysql mysql2 mysql3 mysql4 mysql5 mysql6 mysql8 prometheus grafana");
         return buildResult + "\n" + upResult;
     }
 
