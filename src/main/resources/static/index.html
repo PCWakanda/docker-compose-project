@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fábrica de Microservicios</title>
+</head>
+<body>
+    <h1>Fábrica de Microservicios</h1>
+    <button onclick="build()">Build</button>
+    <h2>Microservicios</h2>
+    <form id="servicesForm">
+        <input type="checkbox" name="services" value="microservicio1"> Microservicio 1<br>
+        <input type="checkbox" name="services" value="microservicio2"> Microservicio 2<br>
+        <input type="checkbox" name="services" value="microservicio3"> Microservicio 3<br>
+        <input type="checkbox" name="services" value="microservicio4"> Microservicio 4<br>
+        <input type="checkbox" name="services" value="microservicio5"> Microservicio 5<br>
+        <input type="checkbox" name="services" value="microservicio6"> Microservicio 6<br>
+    </form>
+    <button onclick="up()">Up</button>
+    <button onclick="down()">Down</button>
+    <button onclick="downAll()">Down All</button> <!-- Nuevo botón -->
+
+    <script>
+        function build() {
+            fetch('/fabrica/build', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => alert(data));
+        }
+
+        function up() {
+            const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+                .map(checkbox => checkbox.value);
+            fetch('/fabrica/up', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(services)
+            })
+                .then(response => response.text())
+                .then(data => alert(data));
+        }
+
+        function down() {
+            const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+                .map(checkbox => checkbox.value);
+            fetch('/fabrica/down', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(services)
+            })
+                .then(response => response.text())
+                .then(data => alert(data));
+        }
+
+        function downAll() { // Nueva función
+            fetch('/fabrica/downAll', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => alert(data));
+        }
+    </script>
+</body>
+</html>
