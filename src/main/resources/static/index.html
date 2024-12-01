@@ -36,7 +36,10 @@
                 body: JSON.stringify(services)
             })
                 .then(response => response.text())
-                .then(data => alert(data));
+                .then(data => {
+                    alert(data);
+                    deselectAll();
+                });
         }
 
         function down() {
@@ -48,13 +51,21 @@
                 body: JSON.stringify(services)
             })
                 .then(response => response.text())
-                .then(data => alert(data));
+                .then(data => {
+                    alert(data);
+                    deselectAll();
+                });
         }
 
         function downAll() {
             fetch('/fabrica/downAll', { method: 'POST' })
                 .then(response => response.text())
                 .then(data => alert(data));
+        }
+
+        function deselectAll() {
+            document.querySelectorAll('input[name="services"]:checked')
+                .forEach(checkbox => checkbox.checked = false);
         }
     </script>
 </body>
