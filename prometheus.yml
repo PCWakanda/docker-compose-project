@@ -37,3 +37,8 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'microservicio8:8087' ]
+
+  - job_name: 'microservicio10'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'microservicio8:8089' ]
