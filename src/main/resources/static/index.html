@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Fábrica de Microservicios</h1>
-    <button onclick="build()">Build</button>
+    <button onclick="encender()">Encender</button> <!-- Cambiado a Encender -->
     <h2>Microservicios</h2>
     <form id="servicesForm">
         <input type="checkbox" name="services" value="microservicio1"> Microservicio 1<br>
@@ -18,11 +18,11 @@
     </form>
     <button onclick="up()">Up</button>
     <button onclick="down()">Down</button>
-    <button onclick="downAll()">Down All</button> <!-- Nuevo botón -->
+    <button onclick="downAll()">Down All</button>
 
     <script>
-        function build() {
-            fetch('/fabrica/build', { method: 'POST' })
+        function encender() { // Nueva función
+            fetch('/fabrica/encender', { method: 'POST' })
                 .then(response => response.text())
                 .then(data => alert(data));
         }
@@ -51,7 +51,7 @@
                 .then(data => alert(data));
         }
 
-        function downAll() { // Nueva función
+        function downAll() {
             fetch('/fabrica/downAll', { method: 'POST' })
                 .then(response => response.text())
                 .then(data => alert(data));

@@ -24,9 +24,16 @@ public class FabricaController {
         return executeCommand("docker-compose stop " + servicesList);
     }
 
-    @PostMapping("/downAll") // Nuevo método
+    @PostMapping("/downAll")
     public String downAll() throws IOException, InterruptedException {
         return executeCommand("docker-compose down");
+    }
+
+    @PostMapping("/encender") // Nuevo método
+    public String encender() throws IOException, InterruptedException {
+        String buildResult = executeCommand("docker-compose build");
+        String upResult = executeCommand("docker-compose up -d eureka-server rabbitmq mysql mysql2 mysql3 mysql4 mysql5 mysql6 prometheus grafana");
+        return buildResult + "\n" + upResult;
     }
 
     private String executeCommand(String command) throws IOException, InterruptedException {
