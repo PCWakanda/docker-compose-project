@@ -289,15 +289,15 @@ services:
       timeout: 5s
       retries: 5
 
-  microservicio10:
+  microservicio7:
     build:
-      context: /Users/jose/Documents/GitHub/Microservicio10
+      context: /Users/jose/Documents/GitHub/Microservicio7
       dockerfile: Dockerfile
     ports:
-      - "8089:8089"
+      - "8086:8086"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql3:3306/my-app
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql7:3306/my-app
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: P4ssword!
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: prometheus
@@ -306,15 +306,15 @@ services:
     depends_on:
       eureka-server:
         condition: service_started
-      mysql10:
+      mysql7:
         condition: service_healthy
     networks:
       - eureka-network
 
-  mysql10:
+  mysql7:
     image: mysql:8.0
     ports:
-      - "3320:3306"
+      - "3317:3306"
     environment:
       MYSQL_ROOT_PASSWORD: P4ssword!
       MYSQL_DATABASE: my-app
