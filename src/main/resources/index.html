@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fábrica de Microservicios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .instructions-container, .app-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .instructions-container {
+            background: #ffffff;
+            z-index: 2;
+        }
+
+        .instructions {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions h3 {
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .instructions ul li {
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        .app-container {
+            transform: translateX(100%);
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .side-instructions {
+            flex: 1;
+            max-width: 300px;
+            margin: 0 20px; /* Espacio equilibrado respecto a los bordes */
+            background: #eaf2f8;
+            padding: 20px;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow-y: auto;
+        }
+
+        .side-instructions h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .side-instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .side-instructions ul li {
+            margin-bottom: 10px;
+        }
+
+        .content {
+            flex: 3;
+            margin: 0 20px; /* Igual margen que las instrucciones */
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        form label {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        form label:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        form label:active {
+            transform: scale(0.95);
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .gif-container {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .gif-container img {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section .microservices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+<body>
+<div class="instructions-container">
+    <div class="instructions">
+        <h3>Instrucciones:</h3>
+        <ul>
+            <li>1. Haz clic en <strong>Encender</strong> para inicializar la fábrica.</li>
+            <li>2. Selecciona los microservicios que deseas levantar y haz clic en <strong>Up</strong>.</li>
+            <li>3. Para bajar un microservicio específico, selecciónalo y haz clic en <strong>Down</strong>.</li>
+            <li>4. Para bajar todos los microservicios, haz clic en <strong>Down All</strong>.</li>
+        </ul>
+        <button id="entendidoButton">Entendido</button>
+    </div>
+</div>
+
+<div class="app-container">
+    <div class="side-instructions">
+        <h3>Instrucciones:</h3>
+        <ul>
+            <li>1. Haz clic en <strong>Encender</strong> para inicializar la fábrica.</li>
+            <li>2. Selecciona los microservicios que deseas levantar y haz clic en <strong>Up</strong>.</li>
+            <li>3. Para bajar un microservicio específico, selecciónalo y haz clic en <strong>Down</strong>.</li>
+            <li>4. Para bajar todos los microservicios, haz clic en <strong>Down All</strong>.</li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Fábrica de Microservicios</h1>
+        <button onclick="encender()">Encender</button>
+        <h2>Microservicios</h2>
+        <div class="section" id="inactiveMicroservices">
+            <h2>Microservicios Inactivos</h2>
+            <form id="servicesForm">
+                <label>
+                    <input type="checkbox" name="services" value="microservicio1" onchange="toggleGif('gif1')"> Microservicio 1 - Tráfico
+                    <div class="gif-container" id="gif1">
+                        <img src="src/main/resources/trafico-ezgif.com-video-to-gif-converter.gif" alt="Microservicio 1">
+                    </div>
+                </label>
+                <label>
+                    <input type="checkbox" name="services" value="microservicio2" onchange="toggleGif('gif2')"> Microservicio 2 - Planta Energética
+                    <div class="gif-container" id="gif2">
+                        <img src="src/main/resources/sistemadeenergis-ezgif.com-video-to-gif-converter.gif" alt="Microservicio 2">
+                    </div>
+                </label>
+                <label>
+                    <input type="checkbox" name="services" value="microservicio3" onchange="toggleGif('gif3')"> Microservicio 3 - Saneamiento
+                    <div class="gif-container" id="gif3">
+                        <img src="src/main/resources/sistemadeaguasytuberias-ezgif.com-video-to-gif-converter.gif" alt="Microservicio 3">
+                    </div>
+                </label>
+                <label>
+                    <input type="checkbox" name="services" value="microservicio4" onchange="toggleGif('gif4')"> Microservicio 4 - Sistema de Residuos
+                    <div class="gif-container" id="gif4">
+                        <img src="src/main/resources/sistemaderesiduos-ezgif.com-video-to-gif-converter.gif" alt="Microservicio 4">
+                    </div>
+                </label>
+                <label>
+                    <input type="checkbox" name="services" value="microservicio5" onchange="toggleGif('gif5')"> Microservicio 5 - Sistema de Vigilancia
+                    <div class="gif-container" id="gif5">
+                        <img src="src/main/resources/sistemadevigilancia-ezgif.com-video-to-gif-converter.gif" alt="Microservicio 5">
+                    </div>
+                </label>
+                <label>
+                    <input type="checkbox" name="services" value="microservicio6" onchange="toggleGif('gif6')"> Microservicio 6 - Sistema Médico
+                    <div class="gif-container" id="gif6">
+                        <img src="src/main/resources/sistemamedico-ezgif.com-video-to-gif-converter.gif" alt="Microservicio 6">
+                    </div>
+                </label>
+                <label>
+                    <input type="checkbox" name="services" value="microservicio7" onchange="toggleGif('gif7')"> Microservicio 7 - Sistema Educativo
+                    <div class="gif-container" id="gif7">
+                        <img src="src/main/resources/sistemaeducativo-ezgif.com-video-to-gif-converter.gif" alt="Microservicio 7">
+                    </div>
+                </label>
+                <label>
+                    <input type="checkbox" name="services" value="microservicio8" onchange="toggleGif('gif8')"> Microservicio 8 - Ayuntamiento
+                    <div class="gif-container" id="gif8">
+                        <img src="src/main/resources/ayuntamiento y votaciones.gif" alt="Microservicio 8">
+                    </div>
+                </label>
+            </form>
+        </div>
+        <div class="section" id="activeMicroservices">
+            <h2>Microservicios Activos</h2>
+            <div class="microservices" id="activeServicesContainer"></div>
+        </div>
+        <button onclick="up()">Up</button>
+        <button onclick="down()">Down</button>
+        <button onclick="downAll()">Down All</button>
+    </div>
+</div>
+
+<script>
+    const instructionsContainer = document.querySelector('.instructions-container');
+    const appContainer = document.querySelector('.app-container');
+    const entendidoButton = document.getElementById('entendidoButton');
+
+    entendidoButton.addEventListener('click', () => {
+        instructionsContainer.style.transform = 'translateX(-100%)';
+        appContainer.style.transform = 'translateX(0)';
+    });
+
+    function encender() {
+        fetch('/fabrica/encender', { method: 'POST' })
+            .then(response => response.text())
+            .then(data => alert(data));
+    }
+
+    function up() {
+        const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+            .map(checkbox => checkbox.value);
+        fetch('/fabrica/up', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(services)
+        })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                deselectAll();
+            });
+    }
+
+    function down() {
+        const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+            .map(checkbox => checkbox.value);
+        fetch('/fabrica/down', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(services)
+        })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                deselectAll();
+            });
+    }
+
+    function downAll() {
+        fetch('/fabrica/downAll', { method: 'POST' })
+            .then(response => response.text())
+            .then(data => alert(data));
+    }
+
+    function deselectAll() {
+        document.querySelectorAll('input[name="services"]:checked')
+            .forEach(checkbox => checkbox.checked = false);
+    }
+
+    function toggleGif(gifId) {
+        const gifContainer = document.getElementById(gifId);
+        const checkbox = document.querySelector(`input[name="services"][value="${gifId.replace('gif', 'microservicio')}"]`);
+        const label = checkbox.parentElement;
+        const activeContainer = document.getElementById('activeServicesContainer');
+        const inactiveContainer = document.getElementById('servicesForm');
+
+        if (checkbox.checked) {
+            gifContainer.style.display = 'block';
+            activeContainer.appendChild(label);
+        } else {
+            gifContainer.style.display = 'none';
+            inactiveContainer.appendChild(label);
+        }
+    }
+</script>
+</body>
+</html>
